@@ -189,6 +189,8 @@ if __name__ == '__main__':
   #torch.backends.cudnn.benchmark = True
   if torch.cuda.is_available() and not args.cuda:
     print("WARNING: You have a CUDA device, so you should probably run with --cuda")
+  elif torch.cuda.is_available() and args.cuda:
+    device = torch.device("cuda")
 
   # train set
   # -- Note: Use validation set and disable the flipped to enable faster loading.
@@ -198,7 +200,6 @@ if __name__ == '__main__':
   train_size = len(roidb)
 
   print('{:d} roidb entries'.format(len(roidb)))
-
   output_dir = args.save_dir + "/" + args.net + "/" + args.dataset
   if not os.path.exists(output_dir):
     os.makedirs(output_dir)
@@ -276,7 +277,7 @@ if __name__ == '__main__':
     load_name = os.path.join(output_dir,
       'faster_rcnn_{}_{}_{}.pth'.format(args.checksession, args.checkepoch, args.checkpoint))
     print("loading checkpoint %s" % (load_name))
-    checkpoint = torch.load(load_name)
+    checkpoint = torch.load(load_name, map_location=device)
     args.session = checkpoint['session']
     args.start_epoch = checkpoint['epoch']
     fasterRCNN.load_state_dict(checkpoint['model'])
