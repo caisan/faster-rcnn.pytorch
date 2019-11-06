@@ -284,7 +284,6 @@ if __name__ == '__main__':
               gt_boxes.resize_(1, 1, 5).zero_()
               num_boxes.resize_(1).zero_()
 
-      # pdb.set_trace()
       det_tic = time.time()
 
       rois, cls_prob, bbox_pred, \
